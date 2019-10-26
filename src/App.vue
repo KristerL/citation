@@ -3,8 +3,10 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/login">Login</router-link>
+<!--      <button @click="$store.commit('triggerInputOpen')">Open</button>-->
     </div>
     <router-view />
+<!--    <InputForm v-if="this.$store.getters.getInputOpen"></InputForm>-->
   </div>
 </template>
 
@@ -30,3 +32,11 @@
   color: #42b983;
 }
 </style>
+
+<script>
+//  import InputForm from "./components/InputForm";
+//
+//  export default {
+//    components: {InputForm},
+//  }
+</script>
