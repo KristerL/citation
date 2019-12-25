@@ -1,24 +1,84 @@
 <style scoped>
-    .addContainer{
-        width: 30%;
-        border-left: 1px solid #2c3e50;
-        height:100vh;
+    .addContainer {
+        height: 100vh;
+        width: 80%;
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .mainInput, q {
+        width: 100%;
+    }
+
+    input {
+        border: none;
+        border-bottom: 1px solid darkgray;
+        padding: 4px;
+        outline: none
+    }
+
+    .menu-popover-enter,
+    .menu-popover-leave-to {
+        opacity: 0;
+        transform: rotateY(50deg);
+    }
+
+    .menu-popover-enter-to,
+    .menu-popover-leave {
+        opacity: 100%;
+        transform: rotateY(0deg);
+    }
+
+    .menu-popover-enter-active,
+    .menu-popover-leave-active {
+        transition: opacity, transform 200ms ease-out;
+    }
+
+    .dropdown {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dropdown > label {
+        width: 50%;
+        display: flex;
+        margin: 16px 0;
+
+    }
+
+    .dropdown > label > input {
+        width: 100%;
+        margin-left: 8px;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .addContainer {
+            width: 40%;
+        }
     }
 </style>
 
 <template>
     <div class="addContainer">
         <h1>What did I learn today?</h1>
-        <label>Note: <input v-model="myNotes"/></label>
-        <label>Author: <input v-model="author"/></label>
-        <label>Book: <input v-model="book"/></label>
-        <label>Is it a quote?<input @click="toggleQuote" type="checkbox"></label>
-        <button @click="addNote">Add</button>
-        <button @click="addPrevious">Use previous book: </button>
-        <div v-if="errors !== ''">{{errors}}</div>
+        <q><input v-model="myNotes" class="mainInput"/></q>
+        <transition name="menu-popover">
+            <div class="dropdown" v-show="myNotes.length > 0">
+                <label>Author: <input v-model="author"/></label>
+                <label>Source: <input v-model="book"/></label>
+                <div>
+                    <button @click="addQuote">Add as quote</button>
+                    <button @click="addItem">Add as note</button>
+                </div>
+            </div>
+        </transition>
+        <!--        <label>Is it a quote?<input @click="toggleQuote" type="checkbox"></label>-->
+        <!--        <button @click="addPrevious">Use previous book: </button>-->
+        <!--        <div v-if="errors !== ''">{{errors}}</div>-->
     </div>
 </template>
 
@@ -36,11 +96,16 @@
                 author: '',
                 book: '',
                 errors: '',
-                quote: false
+                quote: false,
+                showAdd: false
             }
         },
         methods: {
-            addNote: function () {
+            addQuote: function () {
+                this.quote = true;
+                this.addItem();
+            },
+            addItem: function () {
                 this.errors = '';
 
                 if (this.myNotes !== '') {
@@ -52,22 +117,30 @@
                         quote: this.quote
                     }).then((response) => {
                         if (response) {
-                            this.myNotes = ''
+                            this.resetFields();
                         }
                     }).catch(error => this.errors = error)
                 } else this.errors = "Message missing";
                 console.log('My notes: ' + this.myNotes);
             },
             addPrevious: function () {
-                if(this.$store.getters.getItems && this.$store.getters.getItems.length > 0){
+                if (this.$store.getters.getItems && this.$store.getters.getItems.length > 0) {
                     const lastItem = this.$store.getters.getItems;
-                    console.log(lastItem[lastItem.length -1]);
+                    console.log(lastItem[lastItem.length - 1]);
                     console.log(lastItem);
-                    this.myNotes = lastItem[lastItem.length -1].title;
+                    this.myNotes = lastItem[lastItem.length - 1].title;
                 }
             },
-            toggleQuote: function (){
+            toggleQuote: function () {
                 this.quote = !this.quote;
+            },
+            resetFields: function () {
+                this.myNotes = '',
+                    this.author = '',
+                    this.book = '',
+                    this.errors = '',
+                    this.quote = false,
+                    this.showAdd = false
             }
 
         }

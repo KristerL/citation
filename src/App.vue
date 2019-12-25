@@ -2,6 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
+      <router-link to="/quotes">Quotes</router-link> |
       <router-link to="/login">Login</router-link>
 <!--      <button @click="$store.commit('triggerInputOpen')">Open</button>-->
     </div>
@@ -11,6 +12,9 @@
 </template>
 
 <style>
+  body{
+    margin:0;
+  }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

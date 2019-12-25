@@ -1,17 +1,27 @@
 <style scoped>
     .noteContainer{
-        width:70%;
-        height: 100vh;
+        display: flex;
+        padding: 48px;
+    }
+    .note{
+        max-width: 30%;
+        padding: 32px;
     }
 </style>
 
 <template>
-    <div class="noteContainer" v-if="this.$store.getters.getItems && this.$store.getters.getItems.length > 0">
+    <div v-if="this.$store.getters.getItems && this.$store.getters.getItems.length > 0">
         <h2>My notes</h2>
-        <div v-for="item in this.$store.getters.getItems" :key="item.id">
-            {{item.title}}
-            <button @click="deleteItem(item.id)">Delete</button>
+        <div class="noteContainer">
+        <div class="note" v-for="(item, index) in this.$store.getters.getItems" :key="item.id" @mouseover="elementToShow = index" @mouseout="elementToShow = null">
+            {{item.title}}<br>
+            - {{item.author}}
+            <button @click="deleteItem(item.id)" v-show="elementToShow === index">Delete</button>
         </div>
+            </div>
+    </div>
+    <div v-else>
+        <h1>No notes found</h1>
     </div>
 </template>
 
@@ -23,7 +33,8 @@
         name: "NoteDisplay",
         data: function(){
             return{
-                errors: ''
+                errors: '',
+                elementToShow: null
             }
         },
         methods: {
