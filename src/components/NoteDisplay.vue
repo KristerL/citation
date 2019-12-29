@@ -1,6 +1,7 @@
 <style scoped>
     .noteContainer{
         display: flex;
+        justify-content: center;
         padding: 48px;
     }
     .note{
@@ -14,8 +15,7 @@
         <h2>My notes</h2>
         <div class="noteContainer">
         <div class="note" v-for="(item, index) in this.$store.getters.getItems" :key="item.id" @mouseover="elementToShow = index" @mouseout="elementToShow = null">
-            {{item.title}}<br>
-            - {{item.author}}
+            <Note v-bind:item="item"></Note>
             <button @click="deleteItem(item.id)" v-show="elementToShow === index">Delete</button>
         </div>
             </div>
@@ -27,10 +27,12 @@
 
 <script>
     import {db} from "../main";
+    import Note from "./Note";
 
 
     export default {
         name: "NoteDisplay",
+        components: {Note},
         data: function(){
             return{
                 errors: '',
@@ -48,8 +50,8 @@
                 } else {
                     this.errors = 'Cannot delete';
                 }
-            }}
-
+            }
+        }
     }
 </script>
 

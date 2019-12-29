@@ -11,6 +11,29 @@
         width: 100%;
     }
 
+    button{
+        background: transparent;
+        color:inherit;
+        border: none;
+        cursor: pointer;
+        padding: 0 0 2px;
+        border-bottom: 1px solid #2c3e50;
+    }
+
+    button:first-child{
+        margin-right: 16px;
+    }
+
+    button:hover{
+        font-weight: bold;
+        border-bottom: 2px solid #2c3e50;
+    }
+
+    .addButtonContainer{
+        display: flex;
+        justify-content: center;
+    }
+
     input {
         border: none;
         border-bottom: 1px solid darkgray;
@@ -70,7 +93,7 @@
             <div class="dropdown" v-show="myNotes.length > 0">
                 <label>Author: <input v-model="author"/></label>
                 <label>Source: <input v-model="book"/></label>
-                <div>
+                <div class="addButtonContainer">
                     <button @click="addQuote">Add as quote</button>
                     <button @click="addItem">Add as note</button>
                 </div>
