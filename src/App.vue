@@ -2,8 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/quotes">Quotes</router-link> |
-      <router-link to="/login">Login</router-link>
+      <router-link to="/quotes">Quotes</router-link>
 <!--      <button @click="$store.commit('triggerInputOpen')">Open</button>-->
     </div>
     <router-view />

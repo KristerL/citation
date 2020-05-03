@@ -87,12 +87,15 @@
 
 <template>
     <div class="addContainer">
+        <p>NB! I do not work on this project anymore, thus the db has only read access</p>
         <h1>What did I learn today?</h1>
         <q><input v-model="myNotes" class="mainInput"/></q>
         <transition name="menu-popover">
-            <div class="dropdown" v-show="myNotes.length > 0">
+            <div class="dropdown" v-show="myNotes.length > 0 || showAdd">
                 <label>Author: <input v-model="author"/></label>
                 <label>Source: <input v-model="book"/></label>
+                <label>Keywords: <input v-model="tags"/></label>
+                <div class="tagContainer"></div>
                 <div class="addButtonContainer">
                     <button @click="addQuote">Add as quote</button>
                     <button @click="addItem">Add as note</button>
@@ -100,10 +103,10 @@
             </div>
         </transition>
         <!--        <label>Is it a quote?<input @click="toggleQuote" type="checkbox"></label>-->
-        <!--        <button @click="addPrevious">Use previous book: </button>-->
+                <button @click="addPrevious">Use previous book: </button>
         <!--        <div v-if="errors !== ''">{{errors}}</div>-->
     </div>
-</template>
+</template>4
 
 <script>
     import {db} from "../main";
@@ -119,6 +122,7 @@
                 author: '',
                 book: '',
                 errors: '',
+                tags: '',
                 quote: false,
                 showAdd: false
             }
@@ -137,7 +141,8 @@
                         created_at: Date.now(),
                         author: this.author,
                         book: this.book,
-                        quote: this.quote
+                        quote: this.quote,
+                        tags: this.tags
                     }).then((response) => {
                         if (response) {
                             this.resetFields();
@@ -148,22 +153,26 @@
             },
             addPrevious: function () {
                 if (this.$store.getters.getItems && this.$store.getters.getItems.length > 0) {
-                    const lastItem = this.$store.getters.getItems;
-                    console.log(lastItem[lastItem.length - 1]);
-                    console.log(lastItem);
-                    this.myNotes = lastItem[lastItem.length - 1].title;
+                    let lastItem = this.$store.getters.getItems;
+                    lastItem = lastItem[lastItem.length - 1];
+                    this.author = lastItem.author;
+                    this.book = lastItem.book;
+                    this.tags = lastItem.tags;
+                    this.quote = lastItem.quote;
+                    this.showAdd = true;
                 }
             },
             toggleQuote: function () {
                 this.quote = !this.quote;
             },
             resetFields: function () {
-                this.myNotes = '',
-                    this.author = '',
-                    this.book = '',
-                    this.errors = '',
-                    this.quote = false,
-                    this.showAdd = false
+                this.myNotes = '';
+                    this.author = '';
+                    this.book = '';
+                    this.errors = '';
+                    this.quote = false;
+                    this.showAdd = false;
+                    this.tags = '';
             }
 
         }

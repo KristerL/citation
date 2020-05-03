@@ -24,14 +24,13 @@ export default new Vuex.Store({
             db.collection('items').orderBy('created_at').onSnapshot((snapshot => {
                 items = [];
                 snapshot.forEach(doc => {
-                    items.push({id: doc.id, title: doc.data().title, author: doc.data().author, book: doc.data().book, quote: doc.data().quote})
+                    items.push({id: doc.id, title: doc.data().title, author: doc.data().author, book: doc.data().book, quote: doc.data().quote, createdAt: doc.data().created_at, tags: doc.data().tags})
                 });
 
                 state.items = items
             }))
         },
         triggerInputOpen: state => {
-            console.log("here");
             state.inputOpen = !state.inputOpen;
         }
     },
