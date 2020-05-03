@@ -1,3 +1,5 @@
+Small project to test Vue and Firebase.
+A small app where you can display quotes.
 # citation
 
 ## Project setup
